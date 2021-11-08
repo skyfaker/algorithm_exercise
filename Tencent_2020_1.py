@@ -47,7 +47,6 @@ class Solution1:
 （当前面的楼的高度大于等于后面的楼时，后面的楼将被挡住）
 '''
 
-
 # 解法：分为左右两边，分别用单调栈记录
 class Solution2:
     def findBuilding(self, heights):
@@ -70,11 +69,11 @@ class Solution2:
 
         return re
 
-
 # heights = [5,3,8,3,2,5]
 # # [3,3,5,4,4,4]
 # s = Solution()
 # print(s.findBuilding(heights))
+
 
 '''
 4. 由于业绩优秀，公司给小Q放了 n 天的假，身为工作狂的小Q打算在在假期中工作、锻炼或者休息。
@@ -83,58 +82,60 @@ class Solution2:
 '''
 
 # 解法：实际上是一个有限状态机，状态之间的转换通过动态规划解决
-
 # work = [1,1,0,0]
 # exer = [0,1,1,0]
 # n = 4
-'''
-n = int(input())
-work = list(map(int, input().split()))
-exer = list(map(int, input().split()))
 
-# re[n][0,1,2]分别表示第n天工作、锻炼和休息的情况下休息的总天数，re[0]第0天均为0
-re = [[n for i in range(3)] for _ in range(n+1)] # 工作0 锻炼1 休息2
-re[0] = [0,0,0]
-for i in range(1,n+1):
-    if work[i-1]: #第i天工作，第i天是否可以工作为work[i-1]
-        re[i][0] = min(re[i-1][1], re[i-1][2])
-    if exer[i-1]:
-        re[i][1] = min(re[i - 1][0], re[i - 1][2])
-    re[i][2] = min(re[i - 1][0], re[i-1][1], re[i-1][2]) + 1
-print(min(re[n]))
-'''
+def s4():
+    n = int(input())
+    work = list(map(int, input().split()))
+    exer = list(map(int, input().split()))
+
+    # re[n][0,1,2]分别表示第n天工作、锻炼和休息的情况下休息的总天数，re[0]第0天均为0
+    re = [[n for i in range(3)] for _ in range(n+1)] # 工作0 锻炼1 休息2
+    re[0] = [0,0,0]
+    for i in range(1,n+1):
+        if work[i-1]: #第i天工作，第i天是否可以工作为work[i-1]
+            re[i][0] = min(re[i-1][1], re[i-1][2])
+        if exer[i-1]:
+            re[i][1] = min(re[i - 1][0], re[i - 1][2])
+        re[i][2] = min(re[i - 1][0], re[i-1][1], re[i-1][2]) + 1
+    print(min(re[n]))
+
 
 '''
 5. 小Q在进行一场竞技游戏,这场游戏的胜负关键就在于能否能争夺一条长度为L的河道,即可以看作是[0,L]的一条数轴。
 这款竞技游戏当中有n个可以提供视野的道具−真视守卫,第i个真视守卫能够覆盖区间[x_i,y_i]。现在小Q想知道至少用几个真视守卫就可以覆盖整段河道。 
 '''
-n, L = map(int, input().split())
-data = []
-for _ in range(n):
-    data.append(list(map(int, input().split())))
-data.sort()
 
-def test(data):
-    if not data:
-        return -1
-    else:
-        re = [data.pop(0)]
-        if re[0][0] > 0:
-            return -1
+def s5():
+    n, L = map(int, input().split())
+    data = []
+    for _ in range(n):
+        data.append(list(map(int, input().split())))
+    data.sort()
 
-    last_right = 0
-    while data and re[-1][1]< L:
-        d = data.pop(0)
-        if d[0] > re[-1][1]:
+    def test(data):
+        if not data:
             return -1
-        elif d[1] < re[-1][1]:
-            continue
-        elif d[0] <= last_right:
-            re.pop()
-        re.append(d)
-        last_right = re[-2][1] if len(re) >1 else 0
-    if re[-1][1] < L:
-        return -1
-    else:
-        return len(re)
-print(test(data))
+        else:
+            re = [data.pop(0)]
+            if re[0][0] > 0:
+                return -1
+
+        last_right = 0
+        while data and re[-1][1]< L:
+            d = data.pop(0)
+            if d[0] > re[-1][1]:
+                return -1
+            elif d[1] < re[-1][1]:
+                continue
+            elif d[0] <= last_right:
+                re.pop()
+            re.append(d)
+            last_right = re[-2][1] if len(re) >1 else 0
+        if re[-1][1] < L:
+            return -1
+        else:
+            return len(re)
+    print(test(data))

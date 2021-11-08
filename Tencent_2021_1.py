@@ -102,3 +102,4 @@ def del_min(string):  # 删除字符串中的所有最小值
 #     string = del_min(string)
 # re.sort()
 # print(re[k])
+
